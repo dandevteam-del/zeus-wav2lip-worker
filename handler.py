@@ -107,6 +107,7 @@ def handler(event):
     work = tempfile.mkdtemp(dir=f"{VOL}/tmp")
     audio = f"{work}/a.wav"; _write_b64(inp["audio_b64"], audio)
     fps = str(int(inp.get("fps", 25)))
+    res = int(inp.get("res", 1080))  # static-video render width — higher = sharper GFPGAN restore
 
     if inp.get("image_b64"):
         img = f"{work}/face.png"; _write_b64(inp["image_b64"], img)
@@ -115,7 +116,8 @@ def handler(event):
                               "-show_entries", "format=duration", audio],
                              capture_output=True, text=True).stdout.strip() or "5"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", img,
-                        "-t", dur, "-r", fps, "-vf", "scale=720:-2,pad=720:ceil(ih/2)*2",
+                        "-t", dur, "-r", fps,
+                        "-vf", f"scale={res}:-2:flags=lanczos,pad={res}:ceil(ih/2)*2",
                         "-pix_fmt", "yuv420p", face], check=True)
     else:
         face = f"{work}/face.mp4"; _write_b64(inp["video_b64"], face)
