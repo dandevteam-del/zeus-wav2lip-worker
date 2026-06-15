@@ -27,9 +27,9 @@ os.environ.setdefault("HF_HOME", f"{VOL}/hf")
 # automatable). gfpgan/facexlib weights download on first enhance.
 DL = {
     f"{MODELS}/wav2lip_gan.pth":
-        "https://huggingface.co/numz/wav2lip_studio/resolve/main/Wav2lip/wav2lip_gan.pth",
+        "https://huggingface.co/camenduru/Wav2Lip/resolve/main/checkpoints/wav2lip_gan.pth",
     f"{W2L}/face_detection/detection/sfd/s3fd.pth":
-        "https://huggingface.co/numz/wav2lip_studio/resolve/main/Wav2lip/s3fd.pth",
+        "https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth",
     f"{MODELS}/GFPGANv1.4.pth":
         "https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth",
 }
