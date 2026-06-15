@@ -39,6 +39,10 @@ RUN python3 -c "import os,basicsr; f=os.path.join(os.path.dirname(basicsr.__file
 COPY patch_np.py /app/patch_np.py
 RUN python3 /app/patch_np.py /app/Wav2Lip
 
+# Wav2Lip's audio.py calls librosa.filters.mel() positionally; librosa>=0.10 made
+# sr/n_fft keyword-only. Rewrite to keyword args.
+RUN python3 -c "p='/app/Wav2Lip/audio.py'; s=open(p).read(); s=s.replace('librosa.filters.mel(hp.sample_rate, hp.n_fft,','librosa.filters.mel(sr=hp.sample_rate, n_fft=hp.n_fft,'); open(p,'w').write(s); print('patched audio.py mel() to keyword args')"
+
 # Re-assert numpy pin last, fail loudly if np.float was dropped.
 RUN pip install --force-reinstall --no-deps numpy==1.23.5 && \
     python3 -c "import numpy as np; print('numpy',np.__version__); assert hasattr(np,'float')"
